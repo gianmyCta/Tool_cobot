@@ -122,7 +122,7 @@ def main():
     
     # Opzioni per il controllo del flusso
     parser.add_argument('--skip-path', action='store_true', help='Salta la generazione del percorso')
-    parser.add_argument('--skip-visualization', action='store_true', help='Salta la visualizzazione 3D')
+    parser.add_argument('--no3D', action='store_true', help='Salta la visualizzazione 3D')
     parser.add_argument('--plot-2d', action='store_true', help='Visualizza il percorso in 2D')
     parser.add_argument('--skip-export', action='store_true', help='Salta l\'esportazione del file JSON')
     parser.add_argument('--only-visualization', action='store_true', help='Esegui solo la visualizzazione del percorso esistente')
@@ -256,7 +256,7 @@ def main():
         plot_2d_path(path, z, lavorabile if not args.only_visualization else None)
 
     # Visualizzazione 3D
-    if not args.skip_visualization:
+    if not args.no3D and path:
         logger.info("Inizio visualizzazione della superficie e del percorso")
 
         # Mesh superficie

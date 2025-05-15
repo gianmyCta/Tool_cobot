@@ -1,3 +1,5 @@
+import os
+
 # Dimensioni reali della superficie in millimetri
 SURFACE_WIDTH = 1609.875  # larghezza totale in mm
 SURFACE_HEIGHT = 471.375  # altezza totale in mm
@@ -35,12 +37,17 @@ INPUT_FILES = {
     'output': f"{DATA_FOLDER}/complete_surface.csv"
 }
 
+if not os.path.exists(INPUT_FILES['top']):
+    raise FileNotFoundError(f"Il file {INPUT_FILES['top']} non esiste.")
+if not os.path.exists(INPUT_FILES['bottom']):
+    raise FileNotFoundError(f"Il file {INPUT_FILES['bottom']} non esiste.")
+
 # Parametri per la generazione del percorso utensile
 TOOL_PARAMS = {
     'diametro_default': 30,  # diametro dell'utensile in cm
     'step_default': 15,        # passo del percorso in cm
     'pendenza_max': 0.5,       # pendenza massima accettabile
-    'n_punti_cerchio': 100,    # numero di punti per disegnare il cerchio dell'utensile
+    'n_punti_cerchio': 4,    # numero di punti per disegnare il cerchio dell'utensile
     'colore_percorso': 'blue', # colore del percorso principale
     'colore_deviazione': 'red' # colore dei percorsi di deviazione
 }
@@ -49,4 +56,4 @@ TOOL_PARAMS = {
 EXPORT_PARAMS = {
     'output_default': f"{DATA_FOLDER_OUTPUT}/coordinate_cobot.json",  # nome file di output predefinito
     'indent': 2                                 # indentazione del file JSON
-} 
+}

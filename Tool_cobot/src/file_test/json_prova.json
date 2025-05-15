@@ -1,0 +1,61 @@
+{
+  
+  "persone": [
+    
+      {
+        "nome": "alfio",
+        "cognome": "alfieri",
+        "age": 30,
+        "sesso": "M",
+        "figli": [
+          {
+            "nome": "giovanni",
+            "cognome": "alfieri",
+            "age": 5,
+            "sesso": "M"
+          },
+          {
+            "nome": "mario",
+            "cognome": "alfieri",
+            "age": 3,
+            "sesso": "M"
+          }
+        ]
+      },
+        {
+        "nome": "dario",
+        "cognome": "bianchi",
+        "age": 25,
+        "sesso": "M",
+        "figli": [
+          {
+            "nome": "giulia",
+            "cognome": "bianchi",
+            "age": 2,
+            "sesso": "F"
+          }
+        ]
+      },
+        {
+        "nome": "marco",
+        "cognome": "rossi",
+        "age": 56,
+        "sesso": "F",
+        "figli": [
+          {
+            "nome": "luca",
+            "cognome": "rossi",
+            "age": 30,
+            "sesso": "M"
+          },
+          {
+            "nome": "marta",
+            "cognome": "rossi",
+            "age": 28,
+            "sesso": "F"
+          }
+        ]
+      }
+      
+    ]
+}
