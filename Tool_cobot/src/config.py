@@ -30,12 +30,17 @@ WINDOW_TOP = 50          # posizione y della finestra
 
 # Percorsi dei file
 DATA_FOLDER_OUTPUT = "output"
-DATA_FOLDER = "scansioni"
+DATA_FOLDER = "Tool_cobot/scansioni"
 INPUT_FILES = {
     'top': f"{DATA_FOLDER}/surface_top.csv",
     'bottom': f"{DATA_FOLDER}/surface_bot.csv",
-    'output': f"{DATA_FOLDER}/complete_surface.csv"
+    'output': f"{DATA_FOLDER}/complete_surface.csv",
+    'test': f"{DATA_FOLDER}/test.csv"
 }
+top_file = INPUT_FILES['top']
+bottom_file = INPUT_FILES['bottom']
+surface = INPUT_FILES['output']
+test_file = INPUT_FILES['test']
 
 if not os.path.exists(INPUT_FILES['top']):
     raise FileNotFoundError(f"Il file {INPUT_FILES['top']} non esiste.")

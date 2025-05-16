@@ -200,65 +200,54 @@ def trova_aree_contigue(lavorabile, raggio_cm):
 
 def esporta_per_cobot(path, z, output_file):
     """Esporta il percorso in formato JSON per il cobot."""
+    
+    # Struttura principale del JSON
     output_data = {
-        "percorso": [],
-        "metadata": {
-            "numero_punti": len(path),
-            "dimensioni_superficie": z.shape,
-            "altezza_sicurezza": 50  # mm sopra la superficie
-        }
+        "measures": {
+            "w": float(z.shape[1]),  # larghezza
+            "h": float(z.shape[0])   # altezza
+        },
+        "circles_r": 35.0,        # raggio esterno dell'utensile
+        "circles_r_in": 23.33,    # raggio interno dell'utensile
+        "routes": []
     }
     
-    # Trova le aree contigue lavorabili
-    aree_contigue = trova_aree_contigue(np.ones_like(z, dtype=bool), 5)  # Usa un raggio appropriato
-    punti_per_area = {}
+    # Crea una nuova route
+    current_route = []
     
-    # Raggruppa i punti del percorso per area
     for punto in path:
         x, y, z_val = punto
-        for i, area in enumerate(aree_contigue):
-            if (int(x), int(y)) in area:
-                if i not in punti_per_area:
-                    punti_per_area[i] = []
-                punti_per_area[i].append(punto)
-                break
+        
+        # Calcola la normale nel punto
+        normale = calcola_normale(punto, z)
+        
+        # Converti gli angoli della normale
+        # a, b sono le componenti x,y della normale
+        # c è l'angolo in gradi tra la normale e l'asse z
+        a = float(normale[0])
+        b = float(normale[1])
+        c = float(np.degrees(np.arccos(normale[2])))
+        
+        # Crea il punto nel formato richiesto
+        punto_json = {
+            "a": round(a, 4),
+            "b": round(b, 4),
+            "c": round(c, 4),
+            "x": round(float(x), 4),
+            "y": round(float(y), 4),
+            "z": round(float(z_val), 4),
+            "g": 0.9975  # valore di default per il parametro g
+        }
+        
+        current_route.append(punto_json)
     
-    # Genera il percorso area per area
-    for area_idx in sorted(punti_per_area.keys()):
-        punti_area = punti_per_area[area_idx]
-        
-        # Se non è la prima area, aggiungi un punto di sollevamento dall'ultima posizione
-        if area_idx > 0 and output_data["percorso"]:
-            ultimo_punto = output_data["percorso"][-1]["posizione"]
-            punto_up = genera_punto_sollevamento([ultimo_punto[0], ultimo_punto[1], ultimo_punto[2]])
-            output_data["percorso"].append({
-                "posizione": [float(p) for p in punto_up],
-                "normale": [0, 0, 1],
-                "tipo": "sollevamento"
-            })
-        
-        # Aggiungi un punto di avvicinamento per la nuova area
-        if punti_area:
-            primo_punto = punti_area[0]
-            punto_down = genera_punto_sollevamento(primo_punto)
-            output_data["percorso"].append({
-                "posizione": [float(p) for p in punto_down],
-                "normale": [0, 0, 1],
-                "tipo": "avvicinamento"
-            })
-        
-        # Aggiungi tutti i punti dell'area corrente
-        for punto in punti_area:
-            x, y, z_val = punto
-            normale = calcola_normale(punto, z).tolist()
-            punto_data = {
-                "posizione": [float(x), float(y), float(z_val)],
-                "normale": normale,
-                "tipo": "lavorazione"
-            }
-            output_data["percorso"].append(punto_data)
+    # Aggiungi la route completa all'output
+    if current_route:
+        output_data["routes"].append(current_route)
     
+    # Salva il file JSON
     with open(output_file, 'w') as f:
         json.dump(output_data, f, indent=2)
     
-    logging.info(f"Percorso esportato in {output_file}") 
+    logging.info(f"Percorso esportato in {output_file}")
+    logging.info(f"Numero di punti nel percorso: {len(path)}")

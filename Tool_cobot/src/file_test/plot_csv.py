@@ -1,5 +1,4 @@
 import pandas as pd
-from config import *
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import pyvista as pv
@@ -18,7 +17,7 @@ SUPERFICIE = {
     'larghezza_mm': 1609.857
 }
 #----insersici qui il csv da plottare 
-df = pd.read_csv("scansioni/complete_surface.csv", skiprows=1, index_col=1)
+df = pd.read_csv("/Users/gianmarcomartino/Desktop/Tool_cobot/Tool_cobot/scansioni/test.csv", skiprows=1, index_col=1)
 #---------------------------------------------------------------------------
 df = df.to_numpy()
 df = -df
@@ -37,7 +36,6 @@ plotter.add_axes()
 plotter.show()
 
 
-    # Aggiungi un rettangolo per evidenziare l'area di interesse
     
 plt.show()
 
